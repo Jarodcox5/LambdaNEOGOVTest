@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Text.Json;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.Lambda.Annotations;
+using Amazon.Lambda.Annotations.APIGateway;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 
@@ -15,17 +17,33 @@ using Amazon.Lambda.APIGatewayEvents;
 namespace NEOGOVLambda
 {
 
-    public class Function
+    public class Function 
     {
-
-        public async Task<K9s> FunctionHandler(string input, ILambdaContext context)
+        public async Task<APIGatewayHttpApiV2ProxyResponse> FunctionHandler(APIGatewayHttpApiV2ProxyRequest request, ILambdaContext context)
         {
+            var k9IdString = request.QueryStringParameters?["K9_Id"];
             var dynamoDbContext = new DynamoDBContext(new AmazonDynamoDBClient());
-            var k9 = await dynamoDbContext.LoadAsync<K9s>(input);
-            return k9;
+            var k9 = await dynamoDbContext.LoadAsync<K9s>(k9IdString);
+            
+            if (k9 != null)
+            {
+                return new APIGatewayHttpApiV2ProxyResponse()
+                {
+                    Body = JsonSerializer.Serialize(k9),
+                    StatusCode = 200
+                };
+            }
+            else
+            {
+                return new APIGatewayHttpApiV2ProxyResponse()
+                {
+                    Body = "Invalid K9",
+                    StatusCode = 404
+                }; 
+            } 
         }
 
-    }
+    } 
 
     public class K9s
     {
@@ -33,6 +51,28 @@ namespace NEOGOVLambda
         public string HandlerName { get; set; }
         public string Name { get; set; }
     }
+    // request.PathParameters.TryGetValue("k9Id", out var k9IdString);
+    // var dynamoDbContext = new DynamoDBContext(new AmazonDynamoDBClient());
+    // var k9 = await dynamoDbContext.LoadAsync<K9s>(k9IdString);
+    //
+    // if (k9 != null)
+    // {
+    //     return new APIGatewayHttpApiV2ProxyResponse()
+    //     {
+    //         Body = JsonSerializer.Serialize(k9),
+    //         StatusCode = 200
+    //     };
+    // }
+    // else
+    // {
+    //     return new APIGatewayHttpApiV2ProxyResponse()
+    //     {
+    //         Body = "Invalid K9",
+    //         StatusCode = 404
+    //     }; 
+    // }
     
+    // var dynamoDbContext = new DynamoDBContext(new AmazonDynamoDBClient());
+    // return await dynamoDbContext.LoadAsync<K9s>(k9iId);
     
 }

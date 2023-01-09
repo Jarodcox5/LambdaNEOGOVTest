@@ -11,11 +11,20 @@
         "dependencies": {
           "AWSSDK.DynamoDBv2": "3.7.101.20",
           "Amazon.Lambda.APIGatewayEvents": "2.4.0",
+          "Amazon.Lambda.Annotations": "0.10.0-preview",
           "Amazon.Lambda.Core": "2.1.0",
           "Amazon.Lambda.Serialization.SystemTextJson": "2.2.0"
         },
         "runtime": {
           "NEOGOVLambda.dll": {}
+        }
+      },
+      "Amazon.Lambda.Annotations/0.10.0-preview": {
+        "runtime": {
+          "lib/net6.0/Amazon.Lambda.Annotations.dll": {
+            "assemblyVersion": "0.10.0.0",
+            "fileVersion": "0.10.0.0"
+          }
         }
       },
       "Amazon.Lambda.APIGatewayEvents/2.4.0": {
@@ -71,6 +80,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Amazon.Lambda.Annotations/0.10.0-preview": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-krXJUaC1xhx1v4vHPWjaCGexSTgpTEP6fJZcoEqykx7BPVBCHp/Nh26ggjVUwSvyjI/3u0MUmgTIdKG93T9jqA==",
+      "path": "amazon.lambda.annotations/0.10.0-preview",
+      "hashPath": "amazon.lambda.annotations.0.10.0-preview.nupkg.sha512"
     },
     "Amazon.Lambda.APIGatewayEvents/2.4.0": {
       "type": "package",
