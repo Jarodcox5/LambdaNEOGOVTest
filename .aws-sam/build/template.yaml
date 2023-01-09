@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Sample SAM Template for NEOGOVLambda
+
+  '
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 128
+Resources:
+  NEOGOVLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: NEOGOVLambda
+      Handler: NEOGOVLambda::NEOGOVLambda.Function::FunctionHandler
+      Runtime: dotnet6
+      Architectures:
+      - x86_64
+      MemorySize: 256
+      Environment:
+        Variables:
+          PARAM1: VALUE
+      Events:
+        NEOGOVLambda:
+          Type: Api
+          Properties:
+            Path: /NEOGOVLambda
+            Method: get
+    Metadata:
+      SamResourceId: NEOGOVLambda
+Outputs:
+  NEOGOVLambdaApi:
+    Description: API Gateway endpoint URL for Prod stage for NEOGOVLambda function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/NEOGOVLambda/
+  NEOGOVLambdaFunction:
+    Description: NEOGOVLambda Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - NEOGOVLambda
+      - Arn
+  NEOGOVLambdaIamRole:
+    Description: Implicit IAM Role created for NEOGOVLambda function
+    Value:
+      Fn::GetAtt:
+      - NEOGOVLambdaRole
+      - Arn
