@@ -97,6 +97,43 @@ namespace NEOGOVLambda.Tests
             
 
         }
+        
+        [Fact]
+        public async Task TestPost_Good()
+        {
+
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IDynamoDBContext>().Setup(x => x.LoadAsync<Function.K9s>("123", CancellationToken.None))
+                    .ReturnsAsync(GetK9("123"));
+
+                var mockedK9 = GetK9("123");
+                APIGatewayProxyResponse apiGatewayProxyResponseExpected = new APIGatewayProxyResponse();
+                if (mockedK9 != null)
+                {
+                    apiGatewayProxyResponseExpected = new APIGatewayProxyResponse()
+                    {
+                        StatusCode = 200,
+                        Body = "K9 Added"
+                    }; 
+                }
+                
+                
+                var cls = mock.Create<Function>();
+                
+                IDictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters.Add("K9_Id", "123");
+                
+                _apiGatewayProxyRequest.QueryStringParameters = parameters;
+                Task<APIGatewayProxyResponse> apiGatewayProxyResponseActual = cls.Get(_apiGatewayProxyRequest);
+                
+                
+                Assert.Equal(apiGatewayProxyResponseActual.Result.StatusCode, apiGatewayProxyResponseExpected.StatusCode);
+
+            }
+            
+
+        }
 
         private Function.K9s GetK9(string check)
         {
