@@ -5,8 +5,12 @@
     "dotnet lambda help",
     "All the command line options for the Lambda command can be specified in this file."
   ],
-  "profile": "",
-  "region": "",
+  "profile": "default",
+  "region": "us-west-2",
   "configuration": "Release",
-  "template": "template.yaml"
+  "function-architecture": "x86_64",
+  "function-runtime": "dotnet6",
+  "function-memory-size": 256,
+  "function-timeout": 30,
+  "function-handler": "NEOGOVLambda::NEOGOVLambda.Function::FunctionHandler"
 }
